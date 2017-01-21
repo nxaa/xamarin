@@ -13,7 +13,7 @@ namespace Xamarin2.Data.Models
         public int Number { get; set; }
 
         public int NumberOfPeople { get; set; }
-
+        
         public virtual ICollection<Order> Orders { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }

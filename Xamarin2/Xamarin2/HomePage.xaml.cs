@@ -22,17 +22,17 @@ namespace Xamarin2
 
         async void OnNewOrder(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new OrdersPage());
+            await Navigation.PushAsync(new OrderCreatePage());
         }
 
         async void OnQRCode(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new OrdersPage());
+            await Navigation.PushAsync(new QRScannerPage());
         }
 
         async void OnReservations(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new OrdersPage());
+            await Navigation.PushAsync(new ReservationsPage());
         }
     }
 }

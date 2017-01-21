@@ -102,5 +102,13 @@ namespace Xamarin2
         {
             RestOrderService.Save(order);
         }
+
+        void CloseOrder(object sender, EventArgs e)
+        {
+            order.Status = OrderStatus.Completed;
+            RestOrderService.Save(order);
+            
+            Navigation.RemovePage(this);
+        }
     }
 }

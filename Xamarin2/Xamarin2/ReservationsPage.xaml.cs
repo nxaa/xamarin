@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -11,24 +10,19 @@ using Xamarin2.WebClient.Services;
 
 namespace Xamarin2
 {
-    public partial class OrdersPage : ContentPage
+    public partial class ReservationsPage : ContentPage
     {
-        private ObservableCollection<CustomTextCell> orderSource;
-        public OrdersPage()
+        private ObservableCollection<CustomTextCell> reservationSource;
+        public ReservationsPage()
         {
             InitializeComponent();
-            
-            orderSource = new ObservableCollection<CustomTextCell>();
-            listView.ItemsSource = orderSource;
+
+            reservationSource = new ObservableCollection<CustomTextCell>();
+            listView.ItemsSource = reservationSource;
             listView.ItemSelected += OnSelection;
             listView.IsPullToRefreshEnabled = true;
             listView.Refreshing += RefreshData;
 
-            
-        }
-
-        protected override void OnAppearing ()
-        {
             RefreshData(null, null);
         }
 
@@ -36,9 +30,9 @@ namespace Xamarin2
         {
             if (e.SelectedItem == null)
             {
-                return; //ItemSelected is called on deselection, which results in SelectedItem being set to null
+                return;
             }
-            await Navigation.PushAsync(new OrderDetailsPage(((CustomTextCell)e.SelectedItem).ItemID));
+            await Navigation.PushAsync(new ReservationDetailsPage(((CustomTextCell)e.SelectedItem).ItemID));
         }
 
         void RefreshData(object sender, EventArgs e)
@@ -47,19 +41,19 @@ namespace Xamarin2
             {
                 try
                 {
-                    var orders = await RestOrderService.GetOrders();
+                    var reservations = await RestReservationService.GetReservations();
 
-                    orderSource.Clear();
+                    reservationSource.Clear();
 
-                    foreach (var order in orders)
+                    foreach (var reservation in reservations)
                     {
                         var cell = new CustomTextCell();
-                        cell.ItemID = order.OrderID;
-                        cell.Detail = order.CreateDate.ToString(@"MM\/dd\/yyyy HH:mm");
-                        if (order.Tables != null)
+                        cell.ItemID = reservation.ReservationID;
+                        cell.Detail = reservation.Date.ToString(@"MM\/dd\/yyyy HH:mm");
+                        if (reservation.Tables != null)
                         {
                             var text = string.Empty;
-                            foreach (var table in order.Tables.OrderBy(t => t.Number))
+                            foreach (var table in reservation.Tables.OrderBy(t => t.Number))
                             {
                                 text += table.Number.ToString() + " ";
                             }
@@ -67,11 +61,11 @@ namespace Xamarin2
                         }
                         Device.BeginInvokeOnMainThread(() =>
                         {
-                            orderSource.Add(cell);
+                            reservationSource.Add(cell);
                         });
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
 
                 }

@@ -7,7 +7,37 @@ namespace Xamarin2.WebClient
 {
     static class Constants
     {
-        public static string RestUrlOrders = "http://DESKTOP-II58E4Q:7183/api/Orders";
-        public static string RestUrlOrder = "http://DESKTOP-II58E4Q:7183/api/Orders/{0}";
+        private static string Domain = "http://DESKTOP-II58E4Q:7183/";
+
+        public static string RestUrlOrders
+        {
+            get
+            {
+                return Domain + "api/Orders/{0}";
+            }
+        }
+
+        public static string RestUrlReservations
+        {
+            get
+            {
+                return Domain + "api/Reservations/{0}";
+            }
+        }
+
+        public static string RestUrlFreeTables
+        {
+            get
+            {
+                return Domain + "api/FreeTables";
+            }
+        }
+        public static string RestUrlTables
+        {
+            get
+            {
+                return Domain + "api/Tables/{0}";
+            }
+        }
     }
 }

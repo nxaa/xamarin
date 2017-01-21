@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Xamarin2.OrdersPage">
+             x:Class="Xamarin2.OrderCreatePage">
   <ContentPage.Padding>
     <OnPlatform x:TypeArguments="Thickness"
                 iOS="20, 40, 20, 20"
@@ -13,18 +13,19 @@
                  HorizontalOptions="FillAndExpand"
                  Orientation="Vertical"
                  Spacing="15">
-      <Label Text="Orders" />
-      
+      <Label Text="New Order" />
+
       <ListView  x:Name="listView">
         <ListView.ItemTemplate>
           <DataTemplate>
-            <TextCell Text="{Binding Text}" Detail="{Binding Detail}">
-              
-            </TextCell>
+            <SwitchCell Text="{Binding Text}" On="{Binding Selected, Mode=TwoWay}">
+
+            </SwitchCell>
           </DataTemplate>
         </ListView.ItemTemplate>
       </ListView>
-      
+
+      <Button x:Name="createOrderButton" Text="Create" Clicked="CreateOrder" />
     </StackLayout>
   </ContentPage.Content>
 </ContentPage>

@@ -1,0 +1,60 @@
+﻿@model  Xamarin2.Web.Models.ReservationViewModel
+@{
+    ViewBag.Title = "New Reservation";
+}
+
+<link href="~/Content/jquery.datetimepicker.min.css" rel="stylesheet" />
+
+<h2>New reservation</h2>
+
+<div>
+    <hr />
+    <form method="post">
+        <table>
+            <tr>
+                <td>Date</td>
+                <td>
+                    @Html.EditorFor(model => model.DateString, new { htmlAttributes = new { @class = "datetimepicker", } })
+                    @Html.ValidationMessageFor(t => t.DateString, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+
+            <tr>
+                <td>Number of people</td>
+                <td>
+                    @Html.EditorFor(model => model.NumberOfPeople)
+                    @Html.ValidationMessageFor(t => t.NumberOfPeople, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+
+            <tr>
+                <td>Phone Number</td>
+                <td>
+                    @Html.EditorFor(model => model.PhoneNumberString)
+                    @Html.ValidationMessageFor(t => t.PhoneNumberString, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+
+            <tr>
+                <td>Email</td>
+                <td>
+                    @Html.EditorFor(model => model.Email)
+                    @Html.ValidationMessageFor(t => t.Email, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+        </table>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+    @section Scripts {
+        <script src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+
+        <script type="text/javascript">
+            $(document)
+                .ready(function () {
+                    $('.datetimepicker').datetimepicker();
+                });
+        </script>
+
+    }

@@ -20,7 +20,7 @@ namespace Xamarin2.Web.Controllers
         // GET: api/Orders
         public IQueryable<Order> GetOrders()
         {
-            return db.Orders.Include(o => o.Tables).ToList().AsQueryable();
+            return db.Orders.Include(o => o.Tables).Where(o=> o.Status == OrderStatus.InProgress).ToList().AsQueryable();
         }
 
         // GET: api/Orders/5
@@ -46,7 +46,38 @@ namespace Xamarin2.Web.Controllers
                 return BadRequest();
             }
 
-            db.Entry(order).State = EntityState.Modified;
+            var currentOrder = db.Orders.Find(id);
+            currentOrder.CloseDate = order.CloseDate;
+            currentOrder.CreateDate = order.CreateDate;
+            currentOrder.Status = order.Status;
+
+            var orderItemIds = currentOrder.OrderItems.Select(i => i.OrderItemID);
+            var orderItems = db.OrderItems.Where(i => orderItemIds.Contains(i.OrderItemID));
+            
+            var itemsToRemove = new List<OrderItem>();
+
+            foreach (var item in orderItems)
+            {
+                var orderItem = order.OrderItems.FirstOrDefault(i => i.OrderItemID == item.OrderItemID);
+                if (orderItem != null)
+                {
+                    item.Quantity = orderItem.Quantity;
+                }
+                else
+                {
+                    itemsToRemove.Add(item);
+                }
+            }
+
+            foreach (var item in order.OrderItems)
+            {
+                if (currentOrder.OrderItems.FirstOrDefault(i => i.OrderItemID == item.OrderItemID) == null)
+                {
+                     db.OrderItems.Add(item);
+                }
+            }
+
+            db.OrderItems.RemoveRange(itemsToRemove);
 
             try
             {
@@ -76,26 +107,24 @@ namespace Xamarin2.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Orders.Add(order);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = order.OrderID }, order);
-        }
-
-        // DELETE: api/Orders/5
-        [ResponseType(typeof(Order))]
-        public IHttpActionResult DeleteOrder(int id)
-        {
-            Order order = db.Orders.Find(id);
-            if (order == null)
+            var orderToAdd = new Order();
+            orderToAdd.CreateDate = order.CreateDate;
+            orderToAdd.Status = order.Status;
+            if(order.Reservation != null)
             {
-                return NotFound();
+                orderToAdd.Reservation = db.Reservations.Find(order.Reservation.ReservationID);
+            }
+            orderToAdd.Tables = new List<Table>();
+
+            foreach (var table in order.Tables)
+            {
+                orderToAdd.Tables.Add(db.Tables.First(t => t.TableID == table.TableID));
             }
 
-            db.Orders.Remove(order);
+            db.Orders.Add(orderToAdd);
             db.SaveChanges();
 
-            return Ok(order);
+            return CreatedAtRoute("DefaultApi", new { id = orderToAdd.OrderID }, orderToAdd);
         }
 
         protected override void Dispose(bool disposing)

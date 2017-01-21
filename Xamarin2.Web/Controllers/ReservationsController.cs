@@ -20,20 +20,17 @@ namespace Xamarin2.Web.Controllers
         // GET: api/Reservations
         public IQueryable<Reservation> GetReservations()
         {
-            return db.Reservations;
+            return db.Reservations.Include(o => o.Tables).Where(r => r.Status == ReservationStatus.New)
+                .OrderBy(r => r.Date).ToList().AsQueryable();
         }
 
         // GET: api/Reservations/5
         [ResponseType(typeof(Reservation))]
-        public IHttpActionResult GetReservation(int id)
+        public Reservation GetReservation(int id)
         {
             Reservation reservation = db.Reservations.Find(id);
-            if (reservation == null)
-            {
-                return NotFound();
-            }
 
-            return Ok(reservation);
+            return reservation;
         }
 
         // PUT: api/Reservations/5
@@ -50,7 +47,12 @@ namespace Xamarin2.Web.Controllers
                 return BadRequest();
             }
 
-            db.Entry(reservation).State = EntityState.Modified;
+            var currentReservation = db.Reservations.Find(id);
+            currentReservation.Status = reservation.Status;
+            currentReservation.Date = reservation.Date;
+            currentReservation.Email = reservation.Email;
+            currentReservation.NumberOfPeople = reservation.NumberOfPeople;
+            currentReservation.PhoneNumber = reservation.PhoneNumber;
 
             try
             {
@@ -69,37 +71,6 @@ namespace Xamarin2.Web.Controllers
             }
 
             return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Reservations
-        [ResponseType(typeof(Reservation))]
-        public IHttpActionResult PostReservation(Reservation reservation)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Reservations.Add(reservation);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = reservation.ReservationID }, reservation);
-        }
-
-        // DELETE: api/Reservations/5
-        [ResponseType(typeof(Reservation))]
-        public IHttpActionResult DeleteReservation(int id)
-        {
-            Reservation reservation = db.Reservations.Find(id);
-            if (reservation == null)
-            {
-                return NotFound();
-            }
-
-            db.Reservations.Remove(reservation);
-            db.SaveChanges();
-
-            return Ok(reservation);
         }
 
         protected override void Dispose(bool disposing)

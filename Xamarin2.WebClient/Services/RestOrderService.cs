@@ -3,14 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
+//using System.Net.Http.Formatting;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin2.Data.Models;
 
 namespace Xamarin2.WebClient.Services
 {
-    public class RestOrderService
+    public static class RestOrderService
     {
         static HttpClient client;
 
@@ -24,7 +25,7 @@ namespace Xamarin2.WebClient.Services
         {
             IEnumerable<Order> Items = new List<Order>();
 
-            var uri = new Uri(Constants.RestUrlOrders);
+            var uri = new Uri(string.Format(Constants.RestUrlOrders, string.Empty));
 
             var response = await client.GetAsync(uri);
             if (response.IsSuccessStatusCode)
@@ -40,7 +41,7 @@ namespace Xamarin2.WebClient.Services
         {
             Order order;
 
-            var uri = new Uri(string.Format(Constants.RestUrlOrder, ID.ToString()));
+            var uri = new Uri(string.Format(Constants.RestUrlOrders, ID.ToString()));
 
             var response = await client.GetAsync(uri);
             if (response.IsSuccessStatusCode)
@@ -53,17 +54,39 @@ namespace Xamarin2.WebClient.Services
             return null;
         }
 
-        public static async void Save(Order order)
+        public static void Save(Order order)
         {
-            var uri = new Uri(string.Format(Constants.RestUrlOrder, order.OrderID.ToString()));
+            var uri = new Uri(string.Format(Constants.RestUrlOrders, order.OrderID.ToString()));
+
+            //var foo = await client.PutAsJsonAsync(uri, order);
 
             //var jsonFormatter = new JsonMediaTypeFormatter();
-            var foo = await client.PutAsJsonAsync(uri, order);
-            //var value = JsonConvert.SerializeObject(order);
-            //var foo = new StringContent(value);
+            var value = JsonConvert.SerializeObject(order);
+            var foo = new StringContent(value);
+            foo.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             ////HttpContent content = new ObjectContent<Order>(order, jsonFormatter);
-            //HttpResponseMessage responseMessage = client.PutAsync(uri, foo).Result;
+            HttpResponseMessage responseMessage = client.PutAsync(uri, foo).Result;
+        }
+
+        public static async Task<int> Add(Order order)
+        {
+            var uri = new Uri(string.Format(Constants.RestUrlOrders, string.Empty));
+
+            //var foo = await client.PostAsJsonAsync(uri, order);
+
+            //var jsonFormatter = new JsonMediaTypeFormatter();
+            var value = JsonConvert.SerializeObject(order);
+            var foo = new StringContent(value);
+            foo.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            ////HttpContent content = new ObjectContent<Order>(order, jsonFormatter);
+            HttpResponseMessage responseMessage = client.PostAsync(uri, foo).Result;
+            
+            var content = await responseMessage.Content.ReadAsStringAsync();
+            var newOrder = JsonConvert.DeserializeObject<Order>(content);
+
+            return newOrder.OrderID;
         }
     }
 }

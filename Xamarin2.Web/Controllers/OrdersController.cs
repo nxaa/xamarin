@@ -73,7 +73,12 @@ namespace Xamarin2.Web.Controllers
             {
                 if (currentOrder.OrderItems.FirstOrDefault(i => i.OrderItemID == item.OrderItemID) == null)
                 {
-                     db.OrderItems.Add(item);
+                     db.OrderItems.Add(new OrderItem()
+                     {
+                         MenuItem = db.MenuItems.Find(item.MenuItem.MenuItemID),
+                         Order = currentOrder,
+                         Quantity = item.Quantity
+                     });
                 }
             }
 

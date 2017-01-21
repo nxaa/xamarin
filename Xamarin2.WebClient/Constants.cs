@@ -39,5 +39,12 @@ namespace Xamarin2.WebClient
                 return Domain + "api/Tables/{0}";
             }
         }
+        public static string RestUrlMenuItems
+        {
+            get
+            {
+                return Domain + "api/MenuItems/{0}";
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace Xamarin2
         public HomePage()
         {
             InitializeComponent();
+            this.Title = "My Restaurant";
         }
 
         async void OnOrders(object sender, EventArgs e)

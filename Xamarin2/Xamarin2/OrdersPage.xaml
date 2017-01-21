@@ -13,7 +13,6 @@
                  HorizontalOptions="FillAndExpand"
                  Orientation="Vertical"
                  Spacing="15">
-      <Label Text="Orders" />
       
       <ListView  x:Name="listView">
         <ListView.ItemTemplate>

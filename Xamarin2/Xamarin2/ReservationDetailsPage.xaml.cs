@@ -17,6 +17,7 @@ namespace Xamarin2
         public ReservationDetailsPage(int id)
         {
             InitializeComponent();
+            this.Title = "Reservation Details";
 
             this.id = id;
 

@@ -16,13 +16,17 @@ namespace Xamarin2
         public ReservationsPage()
         {
             InitializeComponent();
+            this.Title = "Reservations";
 
             reservationSource = new ObservableCollection<CustomTextCell>();
             listView.ItemsSource = reservationSource;
             listView.ItemSelected += OnSelection;
             listView.IsPullToRefreshEnabled = true;
             listView.Refreshing += RefreshData;
+        }
 
+        protected override void OnAppearing()
+        {
             RefreshData(null, null);
         }
 

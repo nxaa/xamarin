@@ -17,14 +17,13 @@ namespace Xamarin2
         public OrdersPage()
         {
             InitializeComponent();
-            
+            this.Title = "Orders";
+
             orderSource = new ObservableCollection<CustomTextCell>();
             listView.ItemsSource = orderSource;
             listView.ItemSelected += OnSelection;
             listView.IsPullToRefreshEnabled = true;
             listView.Refreshing += RefreshData;
-
-            
         }
 
         protected override void OnAppearing ()

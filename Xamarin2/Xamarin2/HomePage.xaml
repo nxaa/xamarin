@@ -13,7 +13,6 @@
                  HorizontalOptions="FillAndExpand"
                  Orientation="Vertical"
                  Spacing="15">
-      <Label Text="My Restaurant" />
       <Button x:Name="ordersButon" Text="Orders" Clicked="OnOrders" />
       <Button x:Name="newOrderButton" Text="New Order" Clicked="OnNewOrder" />
       <Button x:Name="qrCodeButton" Text="Scan QR Code" Clicked="OnQRCode" />

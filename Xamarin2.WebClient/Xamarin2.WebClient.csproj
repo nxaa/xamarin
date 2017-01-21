@@ -51,6 +51,7 @@
     </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\RestMenuItemService.cs" />
     <Compile Include="Services\RestOrderService.cs" />
     <Compile Include="Services\RestReservationService.cs" />
     <Compile Include="Services\RestTableService.cs" />

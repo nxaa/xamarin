@@ -16,16 +16,37 @@ namespace Xamarin2
         private ObservableCollection<CustomTextCell> menuItemsSource;
         private int id;
         private Order order;
+        private Data.Models.MenuItem item;
+        private int localId;
 
         public OrderDetailsPage(int id)
         {
             InitializeComponent();
+            this.Title = "Order Details";
 
             menuItemsSource = new ObservableCollection<CustomTextCell>();
             listView.ItemsSource = menuItemsSource;
             this.id = id;
+            this.localId = 0;
 
             LoadOrder();
+        }
+
+        protected override void OnAppearing()
+        {
+            if(item != null && menuItemsSource != null)
+            {
+                var orderItem = order.OrderItems.FirstOrDefault(o => o.MenuItem.MenuItemID == item.MenuItemID);
+                if(orderItem != null)
+                {
+                    orderItem.Quantity++;
+                    menuItemsSource.First(x => x.ItemID == id).Text = orderItem.Quantity + " " + orderItem.MenuItem.Name;
+                }
+                else
+                {
+                    LoadNewOrder();
+                }
+            }
         }
 
         void LoadOrder()
@@ -59,9 +80,29 @@ namespace Xamarin2
             });
         }
 
-        void AddMenuItem(object sender, EventArgs e)
+        private async void LoadNewOrder()
         {
+            var itemDetails = await RestMenuItemService.GetMenuItem(item.MenuItemID);
+            var newOrderItem = new OrderItem();
+            newOrderItem.MenuItem = itemDetails;
+            newOrderItem.Quantity = 1;
+            newOrderItem.OrderItemID = --localId;
+            order.OrderItems.Add(newOrderItem);
 
+            item = null;
+
+            var cell = new CustomTextCell();
+            cell.ItemID = newOrderItem.OrderItemID;
+            cell.Text = newOrderItem.Quantity + " " + newOrderItem.MenuItem.Name;
+            cell.Detail = newOrderItem.MenuItem.Price.ToString();
+            menuItemsSource.Add(cell);
+        }
+
+        async void AddMenuItem(object sender, EventArgs e)
+        {
+            item = new Data.Models.MenuItem();
+
+            await Navigation.PushAsync(new MenuItemsPage(item));
         }
 
         void OnAdd(object sender, EventArgs e)

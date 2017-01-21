@@ -18,11 +18,15 @@ namespace Xamarin2
         public OrderCreatePage()
         {
             InitializeComponent();
+            this.Title = "New Order";
 
             order = new Order();
             orderSource = new ObservableCollection<CustomSwitchCell>();
             listView.ItemsSource = orderSource;
+        }
 
+        protected override void OnAppearing()
+        {
             LoadTables();
         }
 

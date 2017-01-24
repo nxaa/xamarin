@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using ZXing.Mobile;
 
 namespace Xamarin2.Droid
 {
@@ -14,6 +15,7 @@ namespace Xamarin2.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
+            MobileBarcodeScanner.Initialize(Application);
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 

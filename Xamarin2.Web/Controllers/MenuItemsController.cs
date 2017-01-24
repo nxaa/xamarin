@@ -9,13 +9,24 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Xamarin2.Data;
+using Xamarin2.Data.Interfaces;
 using Xamarin2.Data.Models;
 
 namespace Xamarin2.Web.Controllers
 {
     public class MenuItemsController : ApiController
     {
-        private Model db = new Model();
+        private IModel db = new Model();
+
+        public MenuItemsController()
+        {
+
+        }
+
+        public MenuItemsController(IModel db)
+        {
+            this.db = db;
+        }
 
         // GET: api/MenuItems
         public IQueryable<MenuItem> GetMenuItems()

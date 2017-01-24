@@ -56,15 +56,11 @@ namespace Xamarin2.WebClient.Services
         public static void Save(Reservation reservation)
         {
             var uri = new Uri(string.Format(Constants.RestUrlReservations, reservation.ReservationID.ToString()));
-
-            //var foo = await client.PutAsJsonAsync(uri, order);
-
-            //var jsonFormatter = new JsonMediaTypeFormatter();
+            
             var value = JsonConvert.SerializeObject(reservation);
             var foo = new StringContent(value);
             foo.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            ////HttpContent content = new ObjectContent<Order>(order, jsonFormatter);
+            
             HttpResponseMessage responseMessage = client.PutAsync(uri, foo).Result;
         }
     }

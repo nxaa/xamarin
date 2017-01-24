@@ -61,6 +61,7 @@ namespace Xamarin2.Web.Controllers
 
             var vm = new ReservationViewModel()
             {
+                ID = reservation.ReservationID,
                 Date = reservation.Date,
                 Email = reservation.Email,
                 NumberOfPeople = reservation.NumberOfPeople,
@@ -75,8 +76,8 @@ namespace Xamarin2.Web.Controllers
         {
             return View();
         }
-        
-        public IEnumerable<Table> GetFreeTables(DateTime date)
+
+        private IEnumerable<Table> GetFreeTables(DateTime date)
         {
             var dateFrom = date.AddHours(-1);
             var dateTo = date.AddHours(1);

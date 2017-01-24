@@ -8,6 +8,8 @@ namespace Xamarin2.Web.Models
 {
     public class ReservationViewModel
     {
+        public int ID { get; set; }
+
         public DateTime Date { get; set; }
 
         public string DateString { get; set; }

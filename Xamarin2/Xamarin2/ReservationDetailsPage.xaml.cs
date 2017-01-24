@@ -37,11 +37,15 @@ namespace Xamarin2
                     {
                         text += table.Number.ToString() + " ";
                     }
-                    TablesText.Text = text;
-                    DateText.Text = reservation.Date.ToString(@"MM\/dd\/yyyy HH:mm");
-                    NumberOfPeopleText.Text = reservation.NumberOfPeople.ToString();
-                    EmailText.Text = reservation.Email;
-                    PhoneNumberText.Text = reservation.PhoneNumber.ToString();
+
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        TablesText.Text = text;
+                        DateText.Text = reservation.Date.ToString(@"MM\/dd\/yyyy HH:mm");
+                        NumberOfPeopleText.Text = reservation.NumberOfPeople.ToString();
+                        EmailText.Text = reservation.Email;
+                        PhoneNumberText.Text = reservation.PhoneNumber.ToString();
+                    });
                 }
                 catch (Exception ex)
                 {

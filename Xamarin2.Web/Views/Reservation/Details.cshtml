@@ -1,4 +1,5 @@
 ﻿@model Xamarin2.Web.Models.ReservationViewModel
+@using Xamarin2.Web
 
 @{
     ViewBag.Title = "Reservation details";
@@ -42,4 +43,5 @@
         </dd>
 
     </dl>
+    @Html.GenerateQrCode(Model.ID.ToString())
 </div>

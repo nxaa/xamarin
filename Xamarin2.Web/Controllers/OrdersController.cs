@@ -9,13 +9,24 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Xamarin2.Data;
+using Xamarin2.Data.Interfaces;
 using Xamarin2.Data.Models;
 
 namespace Xamarin2.Web.Controllers
 {
     public class OrdersController : ApiController
     {
-        private Model db = new Model();
+        private IModel db = new Model();
+
+        public OrdersController()
+        {
+
+        }
+
+        public OrdersController(IModel db)
+        {
+            this.db = db;
+        }
 
         // GET: api/Orders
         public IQueryable<Order> GetOrders()

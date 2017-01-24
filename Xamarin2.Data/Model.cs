@@ -1,11 +1,12 @@
 namespace Xamarin2.Data
 {
+    using Interfaces;
     using Models;
     using System;
     using System.Data.Entity;
     using System.Linq;
 
-    public class Model : DbContext
+    public class Model : DbContext, IModel
     {
         // Your context has been configured to use a 'Model' connection string from your application's 
         // configuration file (App.config or Web.config). By default, this connection string targets the 

@@ -40,7 +40,7 @@ namespace Xamarin2
                 if(orderItem != null)
                 {
                     orderItem.Quantity++;
-                    menuItemsSource.First(x => x.ItemID == id).Text = orderItem.Quantity + " " + orderItem.MenuItem.Name;
+                    menuItemsSource.First(x => x.ItemID == orderItem.OrderItemID).Text = orderItem.Quantity + " " + orderItem.MenuItem.Name;
                 }
                 else
                 {
@@ -141,11 +141,25 @@ namespace Xamarin2
 
         void SaveOrder(object sender, EventArgs e)
         {
+            foreach(var item in order.OrderItems)
+            {
+                if(item.OrderItemID < 0)
+                {
+                    item.OrderItemID = 0;
+                }
+            }
             RestOrderService.Save(order);
         }
 
         void CloseOrder(object sender, EventArgs e)
         {
+            foreach (var item in order.OrderItems)
+            {
+                if (item.OrderItemID < 0)
+                {
+                    item.OrderItemID = 0;
+                }
+            }
             order.Status = OrderStatus.Completed;
             RestOrderService.Save(order);
             
